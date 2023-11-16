@@ -1,9 +1,12 @@
 import turtle
 screen = turtle.Screen()
+#list of all turtles on screen. 
 all_turtles = []
-#current prompts is a list of all prompts on screen
+#current prompts is a list of all prompts on screen. It needs to be emptied when a screen is changed. Do not append directly.
 current_prompts = []
+#Creates a singular prompt box. Takes arguments based on the text to be added, position, size and color.
 def create_prompt(message_text, box_size_x, box_size_y, color, position: list):
+    #Todo: add code for color.
     t = turtle.Turtle()
     all_turtles.append(t)
     # Start left corner
@@ -26,16 +29,21 @@ def create_prompt(message_text, box_size_x, box_size_y, color, position: list):
     text_turtle.write(message_text, align="center", font=("Arial", 12, "normal"))
     return 
 
+#Adds prompts to the current_prompts list. This list should only be appended to through this method. 
 def add_event_handler(message_triggered, size_x: int, size_y: int, position:list):
     current_prompts.append([message_triggered, size_x, size_y, position])
 
-def create_menu(size_x, size_y, num_boxes, list_messages, position: list):
+#size of box x, size of box y, number of boxes, list of text to go in the options, position of the menu, optional padding
+def create_menu(box_size_x, box_size_y, num_boxes, list_messages, position: list, padding=0):
     for i in range(num_boxes):
-        position = [position[0] + i*size_x + 50, position[1]]
-        add_event_handler(list_messages[i], size_x, size_y, position)
-        create_prompt(list_messages[i], size_x, size_y, "red", position)
-
+        position = [position[0] + i*box_size_x + padding, position[1]]
+        add_event_handler(list_messages[i], box_size_x, box_size_y, position)
+        create_prompt(list_messages[i], box_size_x, box_size_y, "red", position)
+        
+#On click function that's ran every time the user clicks. It checks what prompts are on screen from current_prompts
+#then calculates what the user click.
 def on_click(x, y):
+    print(x, y)
     for i in range(len(current_prompts)):
         # format [message_triggered, size_x, size_y, position]
         prompt = current_prompts[i]
@@ -47,18 +55,27 @@ def on_click(x, y):
         lower_y_bound = min(position[1], bounds_y)
         higher_y_bound = max(position[1], bounds_y)
         if lower_x_bound < x < higher_x_bound and lower_y_bound < y < higher_y_bound:
+            #Todo: introduce progression based on what the user clicks
             print(prompt[0])
 
-if __name__ == "__main__":
-    screen.setup(width=800, height=600)
-    screen.screensize(800, 600)
-    screen_size = [800, 600]
-    turtle.tracer(False)
-    print("Hello world!")
-    options = ["Go to class now", "Sleep in"]
-    count_msg = len(options)
-    create_menu(300, 200, count_msg, options, [-350, -0])
-    turtle.onscreenclick(on_click)
+#function takes information about the next screen and displays it. Returns the changes based on the user's choices.
+def load_screen(position_menu: list, box_size: int, options: list, background_path="", padding=0):
+    #Todo: implement stats about mental health, physical health, etc
+    #Todo: implement background images
+    create_menu(box_size, 200, len(options), options, position_menu, padding=50)
+    value_change = []
+    return value_change
 
+if __name__ == "__main__":
+    #Initalization code
+    menu_size = [1000, 800]
+    screen.setup(width=1200, height=800)
+    turtle.tracer(False)
+    #Bind the onclick method
+    turtle.onscreenclick(on_click)
+    options = ["Go to class now", "Sleep in"]
+    #Load the first screen
+    load_screen([-600, 0], menu_size[0] / len(options), options, padding=50)
+    
 turtle.tracer(True)
 turtle.mainloop()
