@@ -40,12 +40,12 @@ def on_click(x, y):
         # format [message_triggered, size_x, size_y, position]
         prompt = current_prompts[i]
         position = prompt[3]
-        bounds_x = prompt[1] + position[0]
-        bounds_y = prompt[2] + position[1]
-        lower_x_bound = min(x, bounds_x)
-        higher_x_bound = max(x, bounds_x)
-        lower_y_bound = min(y, bounds_y)
-        higher_y_bound = max(y, bounds_y)
+        bounds_x = position[0] + prompt[1]
+        bounds_y = position[1] - prompt[2] 
+        lower_x_bound = min(position[0], bounds_x)
+        higher_x_bound = max(position[0], bounds_x)
+        lower_y_bound = min(position[1], bounds_y)
+        higher_y_bound = max(position[1], bounds_y)
         if lower_x_bound < x < higher_x_bound and lower_y_bound < y < higher_y_bound:
             print(prompt[0])
 
@@ -53,11 +53,12 @@ if __name__ == "__main__":
     screen.setup(width=800, height=600)
     screen.screensize(800, 600)
     screen_size = [800, 600]
+    turtle.tracer(False)
     print("Hello world!")
     options = ["Go to class now", "Sleep in"]
     count_msg = len(options)
     create_menu(300, 200, count_msg, options, [-350, -0])
     turtle.onscreenclick(on_click)
 
-
+turtle.tracer(True)
 turtle.mainloop()
