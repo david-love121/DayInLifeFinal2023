@@ -42,7 +42,11 @@ def on_click(x, y):
         position = prompt[3]
         bounds_x = prompt[1] + position[0]
         bounds_y = prompt[2] + position[1]
-        if x > position[0] and x < bounds_x and y > position[1] and y < bounds_y:
+        lower_x_bound = min(x, bounds_x)
+        higher_x_bound = max(x, bounds_x)
+        lower_y_bound = min(y, bounds_y)
+        higher_y_bound = max(y, bounds_y)
+        if lower_x_bound < x < higher_x_bound and lower_y_bound < y < higher_y_bound:
             print(prompt[0])
 
 if __name__ == "__main__":
