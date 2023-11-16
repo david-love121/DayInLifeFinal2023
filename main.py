@@ -14,6 +14,7 @@ def create_prompt(message_text, box_size_x, box_size_y, color, position: list):
         t.forward(box_size_x)
         t.right(90)
     all_turtles.append(t)
+    
     return 
 
 def create_menu(size_x, size_y, num_boxes, list_messages, position: list):
