@@ -14,11 +14,14 @@ def create_prompt(message_text, box_size_x, box_size_y, color, position: list):
     t.goto(position)
     t.pendown()
     t.setheading(0)
+    t.fillcolor(color)
+    t.begin_fill()
     for _ in range(2):
         t.forward(box_size_x)
         t.right(90)
         t.forward(box_size_y)
         t.right(90)
+    t.end_fill()
     # Turtle is top left facing right 
     text_turtle = turtle.Turtle()
     all_turtles.append(text_turtle)
@@ -26,7 +29,8 @@ def create_prompt(message_text, box_size_x, box_size_y, color, position: list):
     text_turtle.hideturtle()
     text_turtle.goto([position[0] + (box_size_x / 2), position[1] - (box_size_y / 2)])
     text_turtle.pendown()
-    text_turtle.write(message_text, align="center", font=("Arial", 12, "normal"))
+    text_turtle.pencolor("white")
+    text_turtle.write(message_text, align="center", font=("Arial", 16, "normal"))
     return 
 
 #Adds prompts to the current_prompts list. This list should only be appended to through this method. 
@@ -38,7 +42,7 @@ def create_menu(box_size_x, box_size_y, num_boxes, list_messages, position: list
     for i in range(num_boxes):
         position = [position[0] + i*box_size_x + padding, position[1]]
         add_event_handler(list_messages[i], box_size_x, box_size_y, position)
-        create_prompt(list_messages[i], box_size_x, box_size_y, "red", position)
+        create_prompt(list_messages[i], box_size_x, box_size_y, "black", position)
         
 #On click function that's ran every time the user clicks. It checks what prompts are on screen from current_prompts
 #then calculates what the user click.
@@ -59,23 +63,28 @@ def on_click(x, y):
             print(prompt[0])
 
 #function takes information about the next screen and displays it. Returns the changes based on the user's choices.
-def load_screen(position_menu: list, box_size: int, options: list, background_path="", padding=0):
+def load_screen(position_menu: list, box_size: int, options: list, question, background_path="", padding=0):
     #Todo: implement stats about mental health, physical health, etc
     #Todo: implement background images
-    create_menu(box_size, 200, len(options), options, position_menu, padding=50)
+    screen.bgpic(background_path)
+    create_menu(box_size, 100, len(options), options, position_menu, padding=50)
+    create_prompt(question, 1000, 100, "black", [-525, 300])
     value_change = []
     return value_change
 
 if __name__ == "__main__":
     #Initalization code
-    menu_size = [1000, 800]
+    menu_size = [800, 800]
     screen.setup(width=1200, height=800)
     turtle.tracer(False)
     #Bind the onclick method
     turtle.onscreenclick(on_click)
+    #setup the variables for the screen 
     options = ["Go to class now", "Sleep in"]
+    question = "You wake up tired and class is in an hour. What do you do?"
     #Load the first screen
-    load_screen([-600, 0], menu_size[0] / len(options), options, padding=50)
+    load_screen([-525, -100], menu_size[0] / len(options), options, question, background_path="./img/screen_1.gif", padding=50)
     
+
 turtle.tracer(True)
 turtle.mainloop()
